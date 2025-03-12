@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+  name: postgress-db-sts
+  namespace: micro
+spec:
+  selector:
+    matchLabels:
+      app: db
+  replicas: 2
+  template: 
+    metadata:
+      labels:
+        app: db
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: prosgress
+        image: postgres:latest
+        env: 
+          - name: POSTGRES_USER 
+            valueFrom:
+              secretKeyRef:
+                name: db-sec
+                key: username 
+          - name: POSTGRES_PASSWORD
+            valueFrom: 
+              secretKeyRef:
+                name: db-sec
+                key: password
+          - name: POSTGRES_DB
+            value: mydb
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+          - name: pv11
+            mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: pv11
+        emptyDir: {}
+          
+                  

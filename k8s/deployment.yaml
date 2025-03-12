@@ -1,0 +1,122 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: jenkins-pv-claim 
+    #namespace: devops-tools 
+spec: 
+  accessModes:
+    - ReadWriteOnce 
+  resources:
+    requests:
+      storage: 50Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: jenkins-deployment
+    #namespace: devops-tools 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins 
+  template:
+    metadata:
+      labels:
+        app: jenkins 
+    spec:
+      serviceAccountName: rv1111
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      containers:
+      - name: jenkins 
+        image: jenkins/jenkins:lts
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+          requests:
+            memory: "500Mi"
+            cpu: "500m"
+        ports:
+          - name: httpport
+            containerPort: 8080
+          - name: jnlpport
+            containerPort: 50000
+        livenessProbe:
+          httpGet:
+            path: "/login"
+            port: 8080
+          initialDelaySeconds: 90
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: "/login"
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        volumeMounts: 
+          - name: jenkins-data
+            mountPath: /var/jenkins_home
+      volumes:            
+        - name: jenkins-data
+          persistentVolumeClaim: 
+              claimName: jenkins-pv-claim 
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: jenkins-service
+    #  namespace: devops-tools 
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/path: /
+    promitheus.io/port: '8080'
+spec:
+  selector:
+    app: jenkins
+  type: NodePort
+  ports:
+    - port: 8080
+      name: http
+      targetPort: 8080
+      nodePort: 30001
+    - port: 50000
+      name: data
+      targetPort: 50000
+      nodePort: 30011  
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: 
+  name: jenkins-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+      #kubernetes.io/ingress.class: "nginx"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: myapp.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jenkins-service
+            port:
+              number: 80
+
+
+
+  
+
+
+

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: pyapp
+  namespace: micro
+spec:
+  selector:
+    matchLabels: 
+      app: pyapp
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: pyapp
+    spec:
+      containers:
+      - name: pyapp
+        image: rv2811/k8s:pyappv3
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: PersistentVolume 
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: blob.csi.azure.com 
+  name: pv11
+  namespace: micro
+spec: 
+  capacity: 
+    storage: 4Gi
+  accessModes: 
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: azureblob-nfs-premium
+  mountOptions: 
+    - nconnect=4
+  csi: 
+    driver: blob.csi.azure.com
+    volumeHandle: backend11_k8s
+    volumeAttributes:
+      resourceGroup: rg-dev
+      storageAccount: backend11 
+      containerName: k8s
+      protocol: nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: pvc
+  namespace: micro
+spec: 
+  accessModes: 
+    - ReadWriteMany 
+  resources: 
+    requests:
+      storage: 3Gi
+  volumeName: pv11
+  storageClassName: azureblob-nfs-premium
+  
+
+
