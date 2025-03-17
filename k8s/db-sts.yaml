@@ -30,6 +30,7 @@ spec:
                 key: password
           - name: POSTGRES_DB
             value: mydb
+        imagePullPolicy: Always
         ports:
         - containerPort: 5432
         volumeMounts:
@@ -40,3 +41,12 @@ spec:
         emptyDir: {}
           
                   
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-sec
+type: Opaque
+stringData:
+  username: postgres
+  password: password
