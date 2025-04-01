@@ -19,12 +19,11 @@ metadata:
   name: db-service
   namespace: micro 
 spec: 
-  type: NodePort
   selector:
     app.kubernetes.io/name: postgress-db-sts
   ports:
   - protocol: TCP
     port: 5432
-    nodePort: 30011
+      #nodePort: 30011
 
 
