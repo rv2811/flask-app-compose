@@ -1,4 +1,4 @@
-# Import necessary modules from Flask framework v
+# Import necessary modules from Flask framework v6
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
