@@ -15,7 +15,9 @@ spec:
     spec:
       containers:
       - name: pyapp
-        image: rv2811/k8s:pyappv3
+        image: rv2811.azurecr.io/k8s/pyappv4:latest
         ports:
         - containerPort: 80
         imagePullPolicy: Always
+      imagePullSecrets:
+        - name: docker-acr
