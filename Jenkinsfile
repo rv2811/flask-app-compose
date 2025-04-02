@@ -4,12 +4,14 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                // withCredentials([usernamePassword(credentialsId: 'ACR', usernameVariable: 'ACR_USER', passwordVariable: 'ACR_PASS')])
-                    // sh "echo $ACR_PASS |"  
-                    sh "echo $DOCKERACCESSKEY | docker login rv2811.azurecr.io -u rv2811 --password-stdin"
-                    echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
-                    sh "docker build -t  rv2811.azurecr.io/k8s/pyappv7 ."
-                    sh "docker push  rv2811.azurecr.io/k8s/pyappv7"
+                script {
+                        withCredentials([string(credentialsId: 'DOCKERACCESSKEY', variable: 'DOCKERACCESSKEY')])
+                        echo $DOCKERACCESSKEY | docker login rv2811.azurecr.io -u rv2811 --password-stdin
+                        // echo Running ${env.BUILD_ID} on ${env.JENKINS_URL}
+                        docker build -t  rv2811.azurecr.io/k8s/pyappv7 .
+                        docker push  rv2811.azurecr.io/k8s/pyappv7
+
+                    }
 
             }
         }
