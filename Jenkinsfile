@@ -6,8 +6,8 @@ pipeline {
             steps {
                 sh "docker login rv2811.azurecr.io -u admin -p ${env.$DOCKERACCESSKEY}"
                 echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
-                docker build -t  rv2811.azurecr.io/k8s/pyappv7 .
-                docker push  rv2811.azurecr.io/k8s/pyappv7
+                sh "docker build -t  rv2811.azurecr.io/k8s/pyappv7 ."
+                sh "docker push  rv2811.azurecr.io/k8s/pyappv7"
 
             }
         }
