@@ -10,7 +10,7 @@ pipeline {
                         sh "echo $DOCKERACCESSKEY | docker login rv2811.azurecr.io -u rv2811 --password-stdin"
                         // echo Running ${env.BUILD_ID} on ${env.JENKINS_URL}
                         sh "docker build -t  rv2811.azurecr.io/k8s/pyappv7 ."
-                        sh "docker push  rv2811.azurecr.io/k8s/pyappv7"
+                        sh "docker push  rv2811.azurecr.io/k8s/pyappv7:$BUILD_NUMBER"
                         }
 
                     }
