@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: pyapp
-        image: rv2811.azurecr.io/k8s/pyappv4:latest
+        image: rv2811.azurecr.io/k8s/pyappv7:latest
         ports:
         - containerPort: 80
         imagePullPolicy: Always

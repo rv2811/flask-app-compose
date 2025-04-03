@@ -1,4 +1,4 @@
-# Import necessary modules from Flask framework v1qq
+# Import necessary modules from Flask framework vq
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # Configure SQLAlchemy settings to connect to PostgreSQL database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@10.97.7.129:5432/mydatabase'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@db-service.micro.svc.cluster.local:5432/mydatabase'
 
 # Initialize SQLAlchemy instance with the Flask application
 db = SQLAlchemy(app)
