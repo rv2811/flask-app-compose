@@ -18,7 +18,8 @@ kind: Service
 metadata:
   name: db-service
   namespace: micro 
-spec: 
+spec:
+  clusterIP: None  
   selector:
     app.kubernetes.io/name: postgress-db-sts
   ports:
